@@ -32,7 +32,7 @@ SimpleAPI is a simple API built with Django Rest Framework. It allows you to cre
 ## Installation
 1. Clone the repository:
 ```bash
-git clone https://github.com/gabrielbygas/SimpleAPI.git
+git clone https://github.com/gabrielbygas/simpleAPI.git
 ```
 2. Navigate to the project directory:
 ```bash
