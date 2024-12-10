@@ -1,0 +1,7 @@
+django
+django-rest-framework
+requests
+django-cors-headers
+faker
+web3
+python-dotenv
