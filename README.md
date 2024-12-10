@@ -2,7 +2,7 @@
 Project_Name: SimpleAPI
 Project_Description: Simple API with SmartContract
 Project_Type: Django, Django Rest Framework
-Project_URL: https://github.com/gabrielbygas/SimpleAPI
+Project_URL: https://github.com/gabrielbygas/simpleAPI
 Author: Gabriel Kalala && Benedicte Olish
 Author_Email: dev@gabrielkalala.com
 
