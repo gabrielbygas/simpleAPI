@@ -1,10 +1,10 @@
 # SimpleAPI
-Project_Name: SimpleAPI
-Project_Description: Simple API with SmartContract
-Project_Type: Django, Django Rest Framework
-Project_URL: https://github.com/gabrielbygas/simpleAPI
-Author: Gabriel Kalala && Benedicte Olish
-Author_Email: dev@gabrielkalala.com
+- Project_Name: SimpleAPI
+- Project_Description: Simple API with SmartContract
+- Project_Type: Django, Django Rest Framework
+- Project_URL: https://github.com/gabrielbygas/simpleAPI
+- Author: Gabriel Kalala && Benedicte Olish
+- Author_Email: dev@gabrielkalala.com
 
 SimpleAPI is a simple API built with Django Rest Framework. It allows you to create, read, update, and delete data using CRUD operations. The API also includes a Smart Contract that can be used to track the execution time of each operation.
 
