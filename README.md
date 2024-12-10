@@ -22,12 +22,12 @@ SimpleAPI is a simple API built with Django Rest Framework. It allows you to cre
 - The Smart Contract is used to store the execution time of each operation and the corresponding request ID.
 
 ## Requirements
-Python
-Django
-Django Rest Framework
-Faker
-Web3
-Python-dotenv
+- Python
+- Django
+- Django Rest Framework
+- Faker
+- Web3
+- Python-dotenv
 
 ## Installation
 1. Clone the repository:
