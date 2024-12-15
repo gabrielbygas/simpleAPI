@@ -5,7 +5,7 @@ class APIContract:
         """
         self.api_status = False  # Status par défaut
         self.api_method = None   # Méthode utilisée (GET, POST, etc.)
-        self.connection_time = 0  # Temps de connexion (en ms)
+        self.connection_time = 0  # Temps de connexion (en microsecondes)
         self.api_contract_dict = {}  # Dictionnaire des appels précédents
 
     def update_contract(self, request_id, method, execution_time):
@@ -30,7 +30,7 @@ class APIContract:
         Retourne le dictionnaire des appels sous forme de tableau.
         """
         print("APIContractDict:")
-        print(f"{'Request ID':<15} {'Method':<10} {'Execution Time (ms)':<20}")
+        print(f"{'Request ID':<15} {'Method':<10} {'Execution Time (microsecondes)':<20}")
         print("-" * 50)
         for request_id, details in self.api_contract_dict.items():
             print(f"{request_id:<15} {details['method']:<10} {details['execution_time']:<20}")

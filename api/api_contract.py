@@ -108,7 +108,7 @@ w3 = Web3(Web3.HTTPProvider(ALCHEMY_URL))
 if not w3.is_connected():
     raise ConnectionError("Impossible de se connecter au réseau Ethereum.")
 
-print("\n \n Connecté avec succès au réseau Ethereum. \n \n")
+print("\n Connecté avec succès au réseau Ethereum. \n")
 
 # Fonctions utilitaires
 def call_update_contract(contract_address, status, method, executionTime):
@@ -120,11 +120,11 @@ def call_update_contract(contract_address, status, method, executionTime):
     gas_estimate = contract.functions.updateContract(status, method, executionTime).estimate_gas({
         'from': MY_ADDRESS,
     })
-    print(f"\n \n Gas estimé : {gas_estimate} \n \n")
+    # print(f"\n Gas estimé : {gas_estimate} \n")
 
     gaz_price = w3.eth.gas_price
     new_gas_price = int(gaz_price * 1.1) # Ajout de 10 % pour la sécurité
-    print(f"gaz_price : {gaz_price} \n \n New gas price : {new_gas_price} \n \n")
+    # print(f"gaz_price : {gaz_price} \n New gas price : {new_gas_price} \n")
 
     # Construction de la transaction
     transaction = contract.functions.updateContract(status, method, executionTime).build_transaction({
@@ -138,9 +138,9 @@ def call_update_contract(contract_address, status, method, executionTime):
     signed_txn = w3.eth.account.sign_transaction(transaction, private_key=PRIVATE_KEY)
     tx_hash = w3.eth.send_raw_transaction(signed_txn.raw_transaction)
 
-    print(f"\n \n Appel en cours... Hash de la transaction : {tx_hash.hex()} \n \n")
+    print(f"\n Appel en cours... Hash de la transaction : {tx_hash.hex()} \n")
     receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
-    print(f"\n \n Appel confirmé. Transaction : {receipt.transactionHash.hex()} \n \n")
+    print(f"\n Appel confirmé. Transaction : {receipt.transactionHash.hex()} \n")
 
 # Main
 """
@@ -148,7 +148,7 @@ if __name__ == "__main__":
     try:
         # Exemple d'appel de fonction
         call_update_contract(CONTRACT_ADDRESS, True, "GET", 2)
-        print("\n \n Appel ( call_update_contract ) effectué avec succès. \n \n")
+        print("\n Appel ( call_update_contract ) effectué avec succès. \n")
     except Exception as e:
         print(f"Erreur : {e}")
 """
