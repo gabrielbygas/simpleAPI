@@ -143,6 +143,7 @@ def call_update_contract(contract_address, status, method, executionTime):
     print(f"\n \n Appel confirmé. Transaction : {receipt.transactionHash.hex()} \n \n")
 
 # Main
+"""
 if __name__ == "__main__":
     try:
         # Exemple d'appel de fonction
@@ -150,3 +151,4 @@ if __name__ == "__main__":
         print("\n \n Appel ( call_update_contract ) effectué avec succès. \n \n")
     except Exception as e:
         print(f"Erreur : {e}")
+"""

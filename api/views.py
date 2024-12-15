@@ -8,27 +8,14 @@ from .models import Persons
 from .serializers import PersonsSerializer
 from .smart_contract import APIContract  # Importer la classe du smart contract
 from web3 import Web3
-
+from .api_contract import call_update_contract
 
 # Connexion au réseau Ethereum via Alchemy
 # Initialisation de Web3
 w3 = Web3(Web3.HTTPProvider('https://eth-sepolia.g.alchemy.com/v2/AGLtz5e1Ed_0bO4GssdONwnVUacPn3_x'))
-"""
-Uncomment this line: 
-contract_address = '0xYourContractAddressHere' 
-"""
-# contract_address = '0xYourContractAddressHere' # Uncomment this line.
 
-
-abi = [
-    # Insère l'ABI ici
-]
-
-"""
-Uncomment this line: 
-contract = w3.eth.contract(address=contract_address, abi=abi)
-"""
-# contract = w3.eth.contract(address=contract_address, abi=abi) # Uncomment this line.
+# Adresse du contrat déployé
+CONTRACT_ADDRESS = "0xd8b934580fcE35a11B58C6D73aDeE468a2833fa8"
 
 # Instancier un contrat global (optionnel, pour persistance)
 smart_contract = APIContract()
@@ -172,6 +159,7 @@ def update_contract_data(request_id, method, execution_time):
             request_id,
             True,  # Statut (par défaut, succès)
             method,
+            execution_time,
             w3.eth.default_account  # Remplace par ton adresse Ethereum
         ).build_transaction({
             'from': '0xYourAddressHere',
@@ -213,7 +201,8 @@ class PersonsContractAPIView(APIView):
             # Mettre à jour le smart contract
             request_id = f"GET-{pk}"
             execution_time = (time.perf_counter() - start_time) * 1000
-            update_contract_data(request_id, "GET", execution_time)
+            # update_contract_data(request_id, "GET", execution_time)
+            call_update_contract(CONTRACT_ADDRESS, True, "GET", execution_time)
             smart_contract.update_contract(request_id, "GET with Smart Contract", execution_time)
 
             return Response(
@@ -228,7 +217,8 @@ class PersonsContractAPIView(APIView):
         # Mettre à jour le smart contract
         request_id = f"GET_ALL-{int(time.time() * 1000)}"
         execution_time = (time.perf_counter() - start_time) * 1000
-        update_contract_data(request_id, "GET", execution_time)
+        #  update_contract_data(request_id, "GET", execution_time)
+        call_update_contract(CONTRACT_ADDRESS, True, "GET", execution_time)
         smart_contract.update_contract(request_id, "GET_ALL with Smart Contract", execution_time)
 
         return Response(
@@ -249,7 +239,8 @@ class PersonsContractAPIView(APIView):
             # Mettre à jour le smart contract
             request_id = f"POST-{serializer.data['id']}"
             execution_time = (time.perf_counter() - start_time) * 1000
-            update_contract_data(request_id, "POST", execution_time)
+            # update_contract_data(request_id, "POST", execution_time)
+            call_update_contract(CONTRACT_ADDRESS, True, "GET", execution_time)
             smart_contract.update_contract(request_id, "POST with Smart Contract", execution_time)
 
             return Response(
@@ -272,7 +263,8 @@ class PersonsContractAPIView(APIView):
             # Mettre à jour le smart contract
             request_id = f"PUT-{serializer.data['id']}"
             execution_time = (time.perf_counter() - start_time) * 1000
-            update_contract_data(request_id, "PUT", execution_time)
+            # update_contract_data(request_id, "PUT", execution_time)
+            call_update_contract(CONTRACT_ADDRESS, True, "GET", execution_time)
             smart_contract.update_contract(request_id, "PUT with Smart Contract", execution_time)
 
             return Response(
@@ -293,7 +285,8 @@ class PersonsContractAPIView(APIView):
         # Mettre à jour le smart contract
         request_id = f"DELETE-{pk}"
         execution_time = (time.perf_counter() - start_time) * 1000
-        update_contract_data(request_id, "DELETE", execution_time)
+        # update_contract_data(request_id, "DELETE", execution_time)
+        call_update_contract(CONTRACT_ADDRESS, True, "GET", execution_time)
         smart_contract.update_contract(request_id, "DELETE with Smart Contract", execution_time)
 
         return Response(
