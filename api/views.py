@@ -20,6 +20,9 @@ CONTRACT_ADDRESS = "0xd8b934580fcE35a11B58C6D73aDeE468a2833fa8"
 # Instancier un contrat global (optionnel, pour persistance)
 smart_contract = APIContract()
 
+# Fichier de stockage des données
+FILENAME = "summary.json"
+
 # Classe d'API pour les opérations CRUD sur les personnes avec calcul du temps d'exécution sans Smart Contract.
 class PersonsAPIView(APIView):
     """
@@ -36,11 +39,11 @@ class PersonsAPIView(APIView):
             # Récupération d'une seule personne
             person = get_object_or_404(Persons, pk=pk)
             serializer = PersonsSerializer(person)
-            execution_time = (time.perf_counter() - start_time) * 1000000
 
-             # Mettre à jour le smart contract
+            # Mettre à jour le smart contract
             request_id = f"GET-{pk}"
-            smart_contract.update_contract(request_id, "GET", execution_time)
+            execution_time = int((time.perf_counter() - start_time) * 1000000)
+            smart_contract.save_to_file(FILENAME, request_id, "GET", execution_time)
 
             return Response(
                 {"data": serializer.data, "execution_time": f"{execution_time} microsecondes"},
@@ -50,11 +53,11 @@ class PersonsAPIView(APIView):
         # Récupération de toutes les personnes
         persons = Persons.objects.all()
         serializer = PersonsSerializer(persons, many=True)
-        execution_time = (time.perf_counter() - start_time) * 1000000
 
         # Mettre à jour le smart contract
         request_id = f"GET_ALL-{int(time.time() * 1000000)}"
-        smart_contract.update_contract(request_id, "GET", execution_time)
+        execution_time = int((time.perf_counter() - start_time) * 1000000)
+        smart_contract.save_to_file(FILENAME, request_id, "GET_ALL", execution_time)
 
         return Response(
             {"data": serializer.data, "execution_time": f"{execution_time} microsecondes"},
@@ -66,15 +69,15 @@ class PersonsAPIView(APIView):
         Gère les requêtes POST avec calcul du temps d'exécution.
         """
         start_time = time.perf_counter()
-
         serializer = PersonsSerializer(data=request.data)
+
         if serializer.is_valid():
             serializer.save()
-            execution_time = (time.perf_counter() - start_time) * 1000000
 
-             # Mettre à jour le smart contract
+            # Mettre à jour le smart contract
             request_id = f"POST-{serializer.data['id']}"
-            smart_contract.update_contract(request_id, "POST", execution_time)
+            execution_time = int((time.perf_counter() - start_time) * 1000000)
+            smart_contract.save_to_file(FILENAME, request_id, "POST", execution_time)
 
             return Response(
                 {"data": serializer.data, "execution_time": f"{execution_time} microsecondes"},
@@ -87,16 +90,16 @@ class PersonsAPIView(APIView):
         Gère les requêtes PUT (mise à jour complète) avec calcul du temps d'exécution.
         """
         start_time = time.perf_counter()
-
         person = get_object_or_404(Persons, pk=pk)
         serializer = PersonsSerializer(person, data=request.data)
+
         if serializer.is_valid():
             serializer.save()
-            execution_time = (time.perf_counter() - start_time) * 1000000
             
             # Mettre à jour le smart contract
             request_id = f"PUT-{serializer.data['id']}"
-            smart_contract.update_contract(request_id, "PUT", execution_time)
+            execution_time = int((time.perf_counter() - start_time) * 1000000)
+            smart_contract.save_to_file(FILENAME, request_id, "PUT", execution_time)
 
             return Response(
                 {"data": serializer.data, "execution_time": f"{execution_time} microsecondes"},
@@ -109,26 +112,19 @@ class PersonsAPIView(APIView):
         Gère les requêtes DELETE avec calcul du temps d'exécution.
         """
         start_time = time.perf_counter()
-
         person = get_object_or_404(Persons, pk=pk)
         person.delete()
-        execution_time = (time.perf_counter() - start_time) * 1000000
-
+        
         # Mettre à jour le smart contract
         request_id = f"DELETE-{pk}"
-        smart_contract.update_contract(request_id, "DELETE", execution_time)
+        execution_time = int((time.perf_counter() - start_time) * 1000000)
+        smart_contract.save_to_file(FILENAME, request_id, "DELETE", execution_time)
         
         return Response(
             {"message": "Person deleted successfully.", "execution_time": f"{execution_time} microsecondes"},
             status=status.HTTP_204_NO_CONTENT,
         )
     
-    def get_contract_summary(self, request, *args, **kwargs):
-        """
-        Affiche le contenu du dictionnaire du smart contract.
-        """
-        contract_data = smart_contract.api_contract_dict
-        return Response(contract_data, status=status.HTTP_200_OK)
     
 # Classe d'API pour récupérer le résumé des contrats dans le dictionnaire du smart contract.
 class GetContractSummary(APIView):
@@ -164,11 +160,9 @@ class PersonsContractAPIView(APIView):
 
             # Mettre à jour le smart contract
             request_id = f"GET-{pk}"
-            execution_time = (time.perf_counter() - start_time) * 1000000
-            execution_time = int(execution_time)
-            print(f"\n Execution Time en Microseconde : {execution_time} en microseconde. \n")
-            call_update_contract(CONTRACT_ADDRESS, True, "GET", execution_time)
-            smart_contract.update_contract(request_id, "GET with Smart Contract", execution_time)
+            call_update_contract(CONTRACT_ADDRESS, True, "GET", int((time.perf_counter() - start_time) * 1000000))
+            execution_time = int((time.perf_counter() - start_time) * 1000000)
+            smart_contract.save_to_file(FILENAME, request_id, "GET", execution_time)
 
             return Response(
                 {"data": serializer.data, "execution_time": f"{execution_time} microsecondes"},
@@ -181,11 +175,9 @@ class PersonsContractAPIView(APIView):
 
         # Mettre à jour le smart contract
         request_id = f"GET_ALL-{int(time.time() * 1000000)}"
-        execution_time = (time.perf_counter() - start_time) * 1000000
-        execution_time = int(execution_time)
-        print(f"\n Execution Time en Microseconde : {execution_time} en microseconde. \n")
-        call_update_contract(CONTRACT_ADDRESS, True, "GET", execution_time)
-        smart_contract.update_contract(request_id, "GET_ALL with Smart Contract", execution_time)
+        call_update_contract(CONTRACT_ADDRESS, True, "GET", int((time.perf_counter() - start_time) * 1000000))
+        execution_time = int((time.perf_counter() - start_time) * 1000000)
+        smart_contract.save_to_file(FILENAME, request_id, "GET_ALL with Smart Contract", execution_time)
 
         return Response(
             {"data": serializer.data, "execution_time": f"{execution_time} microsecondes"},
@@ -204,11 +196,9 @@ class PersonsContractAPIView(APIView):
 
             # Mettre à jour le smart contract
             request_id = f"POST-{serializer.data['id']}"
-            execution_time = (time.perf_counter() - start_time) * 1000000
-            execution_time = int(execution_time)
-            print(f"\n Execution Time en Microseconde : {execution_time} en microseconde. \n")
-            call_update_contract(CONTRACT_ADDRESS, True, "GET", execution_time)
-            smart_contract.update_contract(request_id, "POST with Smart Contract", execution_time)
+            call_update_contract(CONTRACT_ADDRESS, True, "POST", int((time.perf_counter() - start_time) * 1000000))
+            execution_time = int((time.perf_counter() - start_time) * 1000000)
+            smart_contract.save_to_file(FILENAME, request_id, "POST with Smart Contract", execution_time)
 
             return Response(
                 {"data": serializer.data, "execution_time": f"{execution_time} microsecondes"},
@@ -221,19 +211,17 @@ class PersonsContractAPIView(APIView):
         Met à jour une personne existante et met à jour le smart contract.
         """
         start_time = time.perf_counter()
-
         person = get_object_or_404(Persons, pk=pk)
         serializer = PersonsSerializer(person, data=request.data)
+
         if serializer.is_valid():
             serializer.save()
 
             # Mettre à jour le smart contract
             request_id = f"PUT-{serializer.data['id']}"
-            execution_time = (time.perf_counter() - start_time) * 1000000
-            execution_time = int(execution_time)
-            print(f"\n Execution Time en Microseconde : {execution_time} en microseconde. \n")
-            call_update_contract(CONTRACT_ADDRESS, True, "GET", execution_time)
-            smart_contract.update_contract(request_id, "PUT with Smart Contract", execution_time)
+            call_update_contract(CONTRACT_ADDRESS, True, "PUT", int((time.perf_counter() - start_time) * 1000000))
+            execution_time = int((time.perf_counter() - start_time) * 1000000)
+            smart_contract.save_to_file(FILENAME, request_id, "PUT with Smart Contract", execution_time)
 
             return Response(
                 {"data": serializer.data, "execution_time": f"{execution_time} microsecondes"},
@@ -246,17 +234,14 @@ class PersonsContractAPIView(APIView):
         Supprime une personne et met à jour le smart contract.
         """
         start_time = time.perf_counter()
-
         person = get_object_or_404(Persons, pk=pk)
         person.delete()
 
         # Mettre à jour le smart contract
         request_id = f"DELETE-{pk}"
-        execution_time = (time.perf_counter() - start_time) * 1000000
-        execution_time = int(execution_time)
-        print(f"\n Execution Time en Microseconde : {execution_time} en microseconde. \n")
-        call_update_contract(CONTRACT_ADDRESS, True, "GET", execution_time)
-        smart_contract.update_contract(request_id, "DELETE with Smart Contract", execution_time)
+        call_update_contract(CONTRACT_ADDRESS, True, "GET", int((time.perf_counter() - start_time) * 1000000))
+        execution_time = int((time.perf_counter() - start_time) * 1000000)
+        smart_contract.save_to_file(FILENAME, request_id, "DELETE with Smart Contract", execution_time)
 
         return Response(
             {"message": "Person deleted successfully.", "execution_time": f"{execution_time} microsecondes"},

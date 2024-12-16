@@ -1,9 +1,13 @@
+import json
+from datetime import datetime
+
 class APIContract:
     def __init__(self):
         """
         Initialisation des variables du smart contract.
         """
         self.api_status = False  # Status par défaut
+        self.request_id = ""
         self.api_method = None   # Méthode utilisée (GET, POST, etc.)
         self.connection_time = 0  # Temps de connexion (en microsecondes)
         self.api_contract_dict = {}  # Dictionnaire des appels précédents
@@ -34,3 +38,36 @@ class APIContract:
         print("-" * 50)
         for request_id, details in self.api_contract_dict.items():
             print(f"{request_id:<15} {details['method']:<10} {details['execution_time']:<20}")
+
+    def save_to_file(self, fichier, request_id, method, execution_time):
+        
+        today_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S") # Obtenir la date du jour
+        self.request_id = request_id
+        self.api_status = True  # Status par défaut
+        self.api_method = method   # Méthode utilisée (GET, POST, etc.)
+        self.connection_time = execution_time  # Temps de connexion (en microsecondes)
+        
+        # Créer un dictionnaire avec les données
+        new_data = {
+            "date": today_date,
+            "request_id": request_id,
+            "method": method,
+            "status": self.api_status,
+            "execution_time": execution_time
+        }
+        
+        # Lire les données existantes
+        try:
+            with open(fichier, 'r') as fichier_json:
+                previous_data = json.load(fichier_json)
+        except FileNotFoundError:
+            previous_data = []
+
+        # Ajouter les nouvelles données
+        previous_data.append(new_data)
+        
+        # Écrire les données mises à jour dans le fichier
+        with open(fichier, 'w') as fichier_json:
+            json.dump(previous_data, fichier_json, indent=4)
+        
+        print("Données enregistrées avec succès!")

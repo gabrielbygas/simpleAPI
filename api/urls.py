@@ -1,4 +1,6 @@
 from django.urls import path, include
+from django.conf.urls.static import static
+from core import settings
 from .views import PersonsAPIView, GetContractSummary, PersonsContractAPIView
 
 
@@ -12,4 +14,4 @@ urlpatterns = [
     path('contracts/', GetContractSummary.as_view(), name='contract-summary'),
     path('persons/contract/', PersonsContractAPIView.as_view(), name='persons-list'),
     path('persons/contract/<int:pk>/', PersonsContractAPIView.as_view(), name='persons-detail'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
