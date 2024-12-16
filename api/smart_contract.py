@@ -46,6 +46,8 @@ class APIContract:
         self.api_status = True  # Status par défaut
         self.api_method = method   # Méthode utilisée (GET, POST, etc.)
         self.connection_time = execution_time  # Temps de connexion (en microsecondes)
+
+        # execution_time = execution_time / 1000000
         
         # Créer un dictionnaire avec les données
         new_data = {
@@ -53,7 +55,7 @@ class APIContract:
             "request_id": request_id,
             "method": method,
             "status": self.api_status,
-            "execution_time": execution_time
+            "execution_time": execution_time + " microsecondes"
         }
         
         # Lire les données existantes
