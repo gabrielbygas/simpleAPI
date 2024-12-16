@@ -9,6 +9,8 @@ from .serializers import PersonsSerializer
 from .smart_contract import APIContract  # Importer la classe du smart contract
 from web3 import Web3
 from .api_contract import call_update_contract
+from django.http import JsonResponse
+import json
 
 # Connexion au réseau Ethereum via Alchemy
 # Initialisation de Web3
@@ -132,14 +134,13 @@ class GetContractSummary(APIView):
     Vue pour récupérer le résumé des contrats dans le dictionnaire du smart contract.
     """
 
-    def get(self, request, *args, **kwargs):
-        """
-        Gérer les requêtes GET pour renvoyer le résumé des contrats.
-        """
-        return Response(
-            smart_contract.api_contract_dict,
-            status=status.HTTP_200_OK
-        )
+    def get(self, request):
+        # Ouvrir le fichier JSON et charger son contenu
+        with open('../static/summary.json') as json_file:
+            data = json.load(json_file)
+        
+        # Retourner le contenu sous forme de réponse JSON
+        return JsonResponse(data)
 
 # Classe CRUD API avec interaction avec le smart contract
 class PersonsContractAPIView(APIView):
