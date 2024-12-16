@@ -55,14 +55,19 @@ class APIContract:
             "request_id": request_id,
             "method": method,
             "status": self.api_status,
-            "execution_time": execution_time + " microsecondes"
+            "execution_time": str(execution_time) + " microsecondes"
         }
         
         # Lire les données existantes
         try:
             with open(fichier, 'r') as fichier_json:
-                previous_data = json.load(fichier_json)
-        except FileNotFoundError:
+                 # Check if file is empty
+                if fichier_json.read().strip() == "":
+                    previous_data = []
+                else:
+                    fichier_json.seek(0)  # Reset the file pointer
+                    previous_data = json.load(fichier_json)
+        except (FileNotFoundError, json.JSONDecodeError):
             previous_data = []
 
         # Ajouter les nouvelles données

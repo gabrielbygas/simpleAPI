@@ -45,7 +45,9 @@ class PersonsAPIView(APIView):
             # Mettre à jour le smart contract
             request_id = f"GET-{pk}"
             execution_time = int((time.perf_counter() - start_time) * 1000000)
+            print(f"\n avant save_to_file \n")
             smart_contract.save_to_file(FILENAME, request_id, "GET", execution_time)
+            print(f"\n apres save_to_file \n")
 
             return Response(
                 {"data": serializer.data, "execution_time": f"{execution_time} microsecondes"},
@@ -135,12 +137,18 @@ class GetContractSummary(APIView):
     """
 
     def get(self, request):
-        # Ouvrir le fichier JSON et charger son contenu
-        with open('summary.json') as json_file:
-            data = json.load(json_file)
+        try:
+            # Ouvrir le fichier JSON et charger son contenu
+            with open('summary.json') as json_file:
+                data = json.load(json_file)
+
+            if not data:
+                return JsonResponse({"error": "No data found"}, status=404)
         
-        # Retourner le contenu sous forme de réponse JSON
-        return JsonResponse(data, safe=False)
+            # Retourner le contenu sous forme de réponse JSON
+            return JsonResponse(data, safe=False)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
 
 # Classe CRUD API avec interaction avec le smart contract
 class PersonsContractAPIView(APIView):
