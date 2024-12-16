@@ -13,10 +13,10 @@ from django.http import JsonResponse
 import json
 
 # Connexion au réseau Ethereum via Alchemy
-# Initialisation de Web3
+# Initialisation de Web3 - copy here
 w3 = Web3(Web3.HTTPProvider('https://eth-sepolia.g.alchemy.com/v2/AGLtz5e1Ed_0bO4GssdONwnVUacPn3_x'))
 
-# Adresse du contrat déployé
+# Adresse du contrat déployé - copy here
 CONTRACT_ADDRESS = "0xd8b934580fcE35a11B58C6D73aDeE468a2833fa8"
 
 # Instancier un contrat global (optionnel, pour persistance)

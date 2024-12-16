@@ -36,7 +36,7 @@ git clone https://github.com/gabrielbygas/simpleAPI.git
 ```
 2. Navigate to the project directory:
 ```bash
-cd SimpleAPI
+cd simpleAPI
 ```
 3. Create a virtual environment:
 ```bash
@@ -83,13 +83,14 @@ contract APIContract {
 }
 ```
 9. Deploy the smart contract on [remix.ethereum.org](https://remix.ethereum.org/): 
-    - Copy __CONTRACT_BYTECODE__ & __CONTRACT_ABI__ to __.env__.
-    - Copy __contract_address__ to __api/views.py__.
-10. Check the __Important Notes__ below before Running the development server:
+    - Copy __CONTRACT_BYTECODE__ & __CONTRACT_ADDRESS__  to __.env__.
+    - Copy __CONTRACT_ABI__ & __CONTRACT_ADDRESS__ to __api/api_contract.py__.
+    - Copy __ALCHEMY_URL__ & __CONTRACT_ADDRESS__ to __api/views.py__.
+10. READ carefully the __Important Notes__ below before Running the development server:
 ```bash
 python manage.py runserver
 ```
-11. Open your web browser and navigate to http://127.0.0.1:8000/api/persons/ to access the API endpoints.
+1.  Open your web browser and navigate to http://127.0.0.1:8000/api/persons/ to access the API endpoints.
 
 
 ## Usage
@@ -113,9 +114,9 @@ curl -X DELETE http://127.0.0.1:8000/api/persons/1/
 ```
 
 ### Smart Contract
-1. Retrieve the Contract Summary:
+1. __Retrieve the Contract Summary__:
 ```bash
-curl http://127.0.0.1:8000/api/contracts/
+curl http://127.0.0.1:8000/api/summary/
 ```
 2. Retrieve the Contract Data:
 ```bash
@@ -124,25 +125,24 @@ curl http://127.0.0.1:8000/api/persons/contract/
 
 ## Importants Notes:
 
-- The Smart Contract is deployed on the Sepolia Testnet.
-- Create an [Alchemy account](https://www.alchemy.com/) , choose __Ethereum__ and __Sepolia__ Testnet.
+- The Smart Contract is deployed on the __Sepolia Testnet__.
+- Create an [Alchemy account](https://www.alchemy.com/) , choose __Ethereum__ and __Sepolia Testnet__.
 - create a __.env__ file and add your own values for the following variables:
 ```txt
     - ALCHEMY_URL (Your Alchemy URL)
-    - MY_ADDRESS (Your Ethereum Address)
+    - MY_ADDRESS (Your Ethereum or Sepolia Address)
     - PRIVATE_KEY (Your Private Key)
     - CONTRACT_BYTECODE (Your Smart Contract Bytecode)
-    - CONTRACT_ABI (Your Smart Contract ABI)
+    - CONTRACT_ADDRESS (Your Smart Contract Address)
 ```
-- The Smart Contract is deployed with the following parameters:
+- The Smart Contract is deployed on [remix.ethereum.org](https://remix.ethereum.org/). After deploying the smart contract the following parameters will be available:
 ```txt
     - Sepolia Testnet
-    - MyAddress
-    - PrivateKey
-    - ContractBytecode
-    - ContractABI
+    - CONTRACT_BYTECODE (Your Smart Contract Bytecode)
+    - CONTRACT_ADDRESS (Your Smart Contract Address)
+    - CONTRACT_ABI (Your Smart Contract ABI)
 ```
-- Uncomment lines in api/views.py to use the Smart Contract.
+- The estimated gas fee and the estimted gas price is calculated automatically. However, if you want to change the gas fee or the gas price, you can do it in __api/api_contract.py__.
   
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

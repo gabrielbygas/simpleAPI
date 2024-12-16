@@ -10,10 +10,10 @@ ALCHEMY_URL = os.getenv('ALCHEMY_URL')
 MY_ADDRESS = os.getenv('MY_ADDRESS')
 PRIVATE_KEY = os.getenv('PRIVATE_KEY')
 
-# Adresse du contrat déployé
+# Adresse du contrat déployé - copy here
 CONTRACT_ADDRESS = "0xd8b934580fcE35a11B58C6D73aDeE468a2833fa8"
 
-# ABI du contrat
+# ABI du contrat - copy here
 CONTRACT_ABI = [
 	{
 		"inputs": [
