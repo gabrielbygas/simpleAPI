@@ -1,0 +1,16 @@
+[
+    {
+        "date": "2024-12-16 11:14:51",
+        "request_id": "GET_ALL-1734347679281917",
+        "method": "GET_ALL with Smart Contract",
+        "status": true,
+        "execution_time": 12388940
+    },
+    {
+        "date": "2024-12-16 11:15:51",
+        "request_id": "GET-55",
+        "method": "GET",
+        "status": true,
+        "execution_time": 9660813
+    }
+]

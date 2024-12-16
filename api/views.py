@@ -136,11 +136,11 @@ class GetContractSummary(APIView):
 
     def get(self, request):
         # Ouvrir le fichier JSON et charger son contenu
-        with open('../static/summary.json') as json_file:
+        with open('summary.json') as json_file:
             data = json.load(json_file)
         
         # Retourner le contenu sous forme de réponse JSON
-        return JsonResponse(data)
+        return JsonResponse(data, safe=False)
 
 # Classe CRUD API avec interaction avec le smart contract
 class PersonsContractAPIView(APIView):
